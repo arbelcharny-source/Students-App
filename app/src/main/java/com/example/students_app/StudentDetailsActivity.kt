@@ -31,8 +31,8 @@ class StudentDetailsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (studentIndex != -1 && studentIndex < Model.shared.students.size) {
-            val student = Model.shared.students[studentIndex]
+        if (studentIndex != -1 && studentIndex < StudentRepository.shared.students.size) {
+            val student = StudentRepository.shared.students[studentIndex]
 
             findViewById<TextView>(R.id.detailsNameTextView).text = "Name: ${student.name}"
             findViewById<TextView>(R.id.detailsIdTextView).text = "ID: ${student.id}"

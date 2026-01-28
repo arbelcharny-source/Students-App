@@ -27,8 +27,8 @@ class EditStudentActivity : AppCompatActivity() {
         val deleteButton: Button = findViewById(R.id.editStudentDeleteButton)
         val cancelButton: Button = findViewById(R.id.editStudentCancelButton)
 
-        if (index != -1 && index < Model.shared.students.size) {
-            val student = Model.shared.students[index]
+        if (index != -1 && index < StudentRepository.shared.students.size) {
+            val student = StudentRepository.shared.students[index]
             nameEditText.setText(student.name)
             idEditText.setText(student.id)
             phoneEditText.setText(student.phone)
@@ -44,12 +44,12 @@ class EditStudentActivity : AppCompatActivity() {
             val isChecked = checkBox.isChecked
 
             val updatedStudent = Student(id, name, phone, address, isChecked)
-            Model.shared.updateStudent(index, updatedStudent)
+            StudentRepository.shared.updateStudent(index, updatedStudent)
             finish()
         }
 
         deleteButton.setOnClickListener {
-            Model.shared.removeStudent(index)
+            StudentRepository.shared.removeStudent(index)
             finish()
         }
 

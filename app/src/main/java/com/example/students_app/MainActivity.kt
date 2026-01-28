@@ -26,14 +26,14 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter = StudentRecyclerAdapter(
-            students = Model.shared.students,
+            students = StudentRepository.shared.students,
             onItemClick = { position ->
                 val intent = Intent(this, StudentDetailsActivity::class.java)
                 intent.putExtra("student_index", position)
                 startActivity(intent)
             },
             onCheckChanged = { position ->
-                val student = Model.shared.students[position]
+                val student = StudentRepository.shared.students[position]
                 student.isChecked = !student.isChecked
                 adapter.notifyItemChanged(position)
             }

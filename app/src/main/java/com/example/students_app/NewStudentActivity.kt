@@ -31,7 +31,7 @@ class NewStudentActivity : AppCompatActivity() {
             val isChecked = checkBox.isChecked
 
             val newStudent = Student(id, name, phone, address, isChecked)
-            Model.shared.addStudent(newStudent)
+            StudentRepository.shared.addStudent(newStudent)
             finish()
         }
 

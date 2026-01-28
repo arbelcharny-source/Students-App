@@ -1,11 +1,11 @@
 package com.example.students_app
 
-class Model private constructor() {
+class StudentRepository private constructor() {
 
     val students: MutableList<Student> = ArrayList()
 
     companion object {
-        val shared = Model()
+        val shared = StudentRepository()
     }
 
     fun addStudent(student: Student) {
