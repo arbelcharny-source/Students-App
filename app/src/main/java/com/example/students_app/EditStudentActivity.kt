@@ -1,12 +1,26 @@
 package com.example.students_app
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 
 class EditStudentActivity : AppCompatActivity() {
+
+    private var selectedImageUri: Uri? = null
+
+    private val pickImageLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        if (uri != null) {
+            selectedImageUri = uri
+            findViewById<ImageView>(R.id.editStudentImageView).setImageURI(uri)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,6 +31,7 @@ class EditStudentActivity : AppCompatActivity() {
 
         val index = intent.getIntExtra("student_index", -1)
 
+        val imageView: ImageView = findViewById(R.id.editStudentImageView)
         val nameEditText: EditText = findViewById(R.id.editStudentNameEditText)
         val idEditText: EditText = findViewById(R.id.editStudentIdEditText)
         val phoneEditText: EditText = findViewById(R.id.editStudentPhoneEditText)
@@ -34,6 +49,15 @@ class EditStudentActivity : AppCompatActivity() {
             phoneEditText.setText(student.phone)
             addressEditText.setText(student.address)
             checkBox.isChecked = student.isChecked
+
+            student.imageUri?.let { uriString ->
+                selectedImageUri = Uri.parse(uriString)
+                imageView.setImageURI(selectedImageUri)
+            }
+        }
+
+        imageView.setOnClickListener {
+            pickImageLauncher.launch("image/*")
         }
 
         saveButton.setOnClickListener {
@@ -43,7 +67,14 @@ class EditStudentActivity : AppCompatActivity() {
             val address = addressEditText.text.toString()
             val isChecked = checkBox.isChecked
 
-            val updatedStudent = Student(id, name, phone, address, isChecked)
+            val updatedStudent = Student(
+                id = id,
+                name = name,
+                phone = phone,
+                address = address,
+                isChecked = isChecked,
+                imageUri = selectedImageUri?.toString()
+            )
             StudentRepository.shared.updateStudent(index, updatedStudent)
             finish()
         }

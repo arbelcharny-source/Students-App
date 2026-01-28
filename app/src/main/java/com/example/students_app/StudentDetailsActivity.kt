@@ -1,9 +1,11 @@
 package com.example.students_app
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -39,6 +41,13 @@ class StudentDetailsActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.detailsPhoneTextView).text = "Phone: ${student.phone}"
             findViewById<TextView>(R.id.detailsAddressTextView).text = "Address: ${student.address}"
             findViewById<CheckBox>(R.id.detailsCheckBox).isChecked = student.isChecked
+
+            val imageView = findViewById<ImageView>(R.id.detailsStudentImageView)
+            if (student.imageUri != null) {
+                imageView.setImageURI(Uri.parse(student.imageUri))
+            } else {
+                imageView.setImageResource(R.mipmap.ic_launcher)
+            }
         } else {
             finish()
         }
