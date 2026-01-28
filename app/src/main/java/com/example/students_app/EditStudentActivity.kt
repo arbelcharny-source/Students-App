@@ -1,5 +1,6 @@
 package com.example.students_app
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
@@ -14,9 +15,13 @@ class EditStudentActivity : AppCompatActivity() {
     private var selectedImageUri: Uri? = null
 
     private val pickImageLauncher = registerForActivityResult(
-        ActivityResultContracts.GetContent()
+        ActivityResultContracts.OpenDocument()
     ) { uri: Uri? ->
         if (uri != null) {
+            contentResolver.takePersistableUriPermission(
+                uri,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
             selectedImageUri = uri
             findViewById<ImageView>(R.id.editStudentImageView).setImageURI(uri)
         }
@@ -52,12 +57,16 @@ class EditStudentActivity : AppCompatActivity() {
 
             student.imageUri?.let { uriString ->
                 selectedImageUri = Uri.parse(uriString)
-                imageView.setImageURI(selectedImageUri)
+                try {
+                    imageView.setImageURI(selectedImageUri)
+                } catch (e: Exception) {
+                    imageView.setImageResource(R.mipmap.ic_launcher)
+                }
             }
         }
 
         imageView.setOnClickListener {
-            pickImageLauncher.launch("image/*")
+            pickImageLauncher.launch(arrayOf("image/*"))
         }
 
         saveButton.setOnClickListener {

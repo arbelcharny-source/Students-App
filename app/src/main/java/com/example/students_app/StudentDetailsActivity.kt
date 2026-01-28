@@ -44,7 +44,11 @@ class StudentDetailsActivity : AppCompatActivity() {
 
             val imageView = findViewById<ImageView>(R.id.detailsStudentImageView)
             if (student.imageUri != null) {
-                imageView.setImageURI(Uri.parse(student.imageUri))
+                try {
+                    imageView.setImageURI(Uri.parse(student.imageUri))
+                } catch (e: Exception) {
+                    imageView.setImageResource(R.mipmap.ic_launcher)
+                }
             } else {
                 imageView.setImageResource(R.mipmap.ic_launcher)
             }

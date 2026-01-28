@@ -36,7 +36,11 @@ class StudentRecyclerAdapter(
         holder.checkBox.isChecked = student.isChecked
 
         if (student.imageUri != null) {
-            holder.imageView.setImageURI(Uri.parse(student.imageUri))
+            try {
+                holder.imageView.setImageURI(Uri.parse(student.imageUri))
+            } catch (e: Exception) {
+                holder.imageView.setImageResource(R.mipmap.ic_launcher)
+            }
         } else {
             holder.imageView.setImageResource(R.mipmap.ic_launcher)
         }
