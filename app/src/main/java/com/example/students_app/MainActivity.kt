@@ -1,20 +1,43 @@
 package com.example.students_app
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: StudentRecyclerAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        recyclerView = findViewById(R.id.studentsRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val fab: FloatingActionButton = findViewById(R.id.addStudentFab)
+        fab.setOnClickListener {
+            val intent = Intent(this, NewStudentActivity::class.java)
+            startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter = StudentRecyclerAdapter(
+            students = Model.shared.students,
+            onItemClick = { position ->
+                val intent = Intent(this, StudentDetailsActivity::class.java)
+                intent.putExtra("student_index", position)
+                startActivity(intent)
+            },
+            onCheckChanged = { position ->
+                val student = Model.shared.students[position]
+                student.isChecked = !student.isChecked
+                adapter.notifyItemChanged(position)
+            }
+        )
+        recyclerView.adapter = adapter
     }
 }
